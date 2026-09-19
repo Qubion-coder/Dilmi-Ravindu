@@ -205,7 +205,7 @@ function CountdownTimer() {
   );
 }
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvlsuJlJRDCWlOq6MDTaR5L86hzjbDI2NAWuUixPRGxh1v-NYC0pY05ygJhKOP7KlnZw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFdxEZLM39Y3UTopgMdFN02BhrNLA1D0_ee1L5W4TtdMJTLB876DRs0Izo8Zuh97a--A/exec";
 
 export default function WeddingInvitation() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -217,8 +217,9 @@ export default function WeddingInvitation() {
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   // Form State
-  const [rsvpData, setRsvpData] = useState({ name: "", guests: "1", dietary: "" });
-  const [wishData, setWishData] = useState({ name: "", message: "" });
+  const initialName = guestName ? `${guestPrefix} ${guestName}`.trim() : "";
+  const [rsvpData, setRsvpData] = useState({ name: initialName, guests: "1" });
+  const [wishData, setWishData] = useState({ name: initialName, message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<null | "rsvp_success" | "wish_success" | "error">(null);
 
@@ -239,7 +240,6 @@ export default function WeddingInvitation() {
       const fieldMapping: Record<string, string> = {
         name: "Name",
         guests: "Guests",
-        dietary: "Dietary Notes",
         message: "Message"
       };
 
@@ -260,8 +260,8 @@ export default function WeddingInvitation() {
       setSubmitStatus(`${formName}_success` as any);
 
       // Reset forms
-      if (formName === "rsvp") setRsvpData({ name: "", guests: "1", dietary: "" });
-      else setWishData({ name: "", message: "" });
+      if (formName === "rsvp") setRsvpData({ name: initialName, guests: "1" });
+      else setWishData({ name: initialName, message: "" });
 
     } catch (error) {
       console.error("Submission error:", error);
@@ -935,17 +935,6 @@ export default function WeddingInvitation() {
                             <div className="w-2 h-2 border-r border-b border-theme-300 rotate-45 transform -translate-y-[25%]" />
                           </div>
                         </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <label className="text-[8px] md:text-[10px] uppercase tracking-[0.3em] font-bold text-theme-200 ml-2">Dietary Notes</label>
-                        <input
-                          type="text"
-                          value={rsvpData.dietary}
-                          onChange={(e) => setRsvpData({ ...rsvpData, dietary: e.target.value })}
-                          placeholder="Allergies, Vegan, etc."
-                          className="w-full bg-transparent border-b border-white/20 px-2 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-theme-300 transition-colors font-cinzel text-lg md:text-xl tracking-wide"
-                        />
                       </div>
 
                       <div className="pt-10">
